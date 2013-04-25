@@ -1,0 +1,17 @@
+fuer<zahl i ist 4 / 4 kleiner <5 minus 3> / i ist i plus 1>
+?
+solange<i kleinergleich 5>
+?
+wahrheitswert i ist wahr.
+text t.
+i ist 5.
+wenn<i kleiner 5>
+?
+i ist wahr.
+!
+ansonsten
+?
+i ist falsch.
+!
+!
+!
