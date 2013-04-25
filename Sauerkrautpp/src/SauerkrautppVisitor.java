@@ -1,4 +1,6 @@
-// Generated from C:\Users\smgug_000\Google Drive\Sauerkrautpp\Sauerkrautpp.g4 by ANTLR 4.0
+package src;
+
+// Generated from C:\Users\smgug_000\Documents\GitHub\Sauerkrautpp\Sauerkrautpp\src\Sauerkrautpp.g4 by ANTLR 4.0
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 

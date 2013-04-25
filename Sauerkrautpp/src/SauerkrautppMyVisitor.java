@@ -1,3 +1,5 @@
+package src;
+
 import org.antlr.v4.runtime.ParserRuleContext;
 
 public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
@@ -13,7 +15,7 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitNicht(SauerkrautppParser.NichtContext ctx) {
-		ctx.getChild(i)
+		ctx.getChild(1);
 		String result = INT2BOOL;
 		result += "isub\n";
 		result += "dup\n";

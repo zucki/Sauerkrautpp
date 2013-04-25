@@ -1,3 +1,5 @@
+package src;
+
 public class Variable {
 	private int index;
 	private Type type;
