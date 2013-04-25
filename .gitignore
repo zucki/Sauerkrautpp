@@ -1,5 +1,5 @@
 *.class
-
+./Sauerkrautpp/bin/*
 # Package Files #
 *.war
 *.ear
