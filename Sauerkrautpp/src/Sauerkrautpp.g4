@@ -42,12 +42,15 @@ lstatement: ausdruck '.'
 				;
 
 statement: lstatement
-				| '?' bstatement '!'
+				| klammerstatement
 				| for_loop
 				| while_loop
 				| if_
 				| function_decl
 				;
+
+klammerstatement: '?' content=bstatement '!'
+;
 
 bstatement: statement
 				| bstatement bstatement

@@ -73,6 +73,8 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 
 	T visitStart(SauerkrautppParser.StartContext ctx);
 
+	T visitKlammerstatement(SauerkrautppParser.KlammerstatementContext ctx);
+
 	T visitFunction_call(SauerkrautppParser.Function_callContext ctx);
 
 	T visitDivision(SauerkrautppParser.DivisionContext ctx);

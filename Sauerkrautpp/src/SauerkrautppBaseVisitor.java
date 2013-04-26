@@ -74,6 +74,8 @@ public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 
 	@Override public T visitStart(SauerkrautppParser.StartContext ctx) { return visitChildren(ctx); }
 
+	@Override public T visitKlammerstatement(SauerkrautppParser.KlammerstatementContext ctx) { return visitChildren(ctx); }
+
 	@Override public T visitFunction_call(SauerkrautppParser.Function_callContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitDivision(SauerkrautppParser.DivisionContext ctx) { return visitChildren(ctx); }

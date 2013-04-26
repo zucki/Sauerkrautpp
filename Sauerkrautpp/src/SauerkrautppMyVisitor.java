@@ -2,6 +2,8 @@ package src;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import src.SauerkrautppParser.KlammerstatementContext;
+
 public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	Scope currentScope;
 	static String BOOL = "wahrheitswert";
@@ -15,8 +17,8 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitNicht(SauerkrautppParser.NichtContext ctx) {
-		ctx.getChild(1);
-		String result = INT2BOOL;
+		String result = visit(ctx.links);
+		result += INT2BOOL;
 		result += "isub\n";
 		result += "dup\n";
 		result += "imul\n";
@@ -48,8 +50,15 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitBstatement(SauerkrautppParser.BstatementContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitBstatement(ctx);
+		return this.visitChildren(ctx);
+	}
+
+	@Override
+	public String visitKlammerstatement(KlammerstatementContext ctx) {
+		this.currentScope = new Scope(this.currentScope);
+		String result = visit(ctx.content);
+		this.currentScope = this.currentScope.getParent();
+		return result;
 	}
 
 	@Override
@@ -66,7 +75,7 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitEmptyArglist(SauerkrautppParser.EmptyArglistContext ctx) {
-		return "()";
+		return "";
 	}
 
 	@Override
@@ -167,9 +176,9 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	public String visitWahrheitswert(SauerkrautppParser.WahrheitswertContext ctx) {
 		String result = "";
 		if (ctx.getText().equals("wahr")) {
-			result = "1";
+			result = "ldc 1\n";
 		} else if (ctx.getText().equals("falsch")) {
-			result = "0";
+			result = "ldc 0\n";
 		} else {
 			System.err.println("Error: Invalid boolean value.");
 		}
@@ -206,7 +215,7 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 			System.err.println("Error: Variable already initialized.");
 		} else {
 			currentScope.put(name, Type.getType(ctx.typ.getText()));
-			result = "ldc "+visit(ctx.wert)+"\n";
+			result = visit(ctx.wert);
 			result += "istore " + String.valueOf(currentScope.getVariable(name).getIndex())+"\n";
 		}
 		return result;
@@ -219,16 +228,19 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitGleich(SauerkrautppParser.GleichContext ctx) {
-		String result = "i2l\n";
-		result += "swap\n";
-		result += "i2l\n";
-		result += "lcmp\n";
-		result += "dup\n";
-		result += "imul\n";
-		result += "dup\n";
-		result += "decr\n";
-		result += "imul\n";
-		return result;
+		StringBuilder builder = new StringBuilder();
+		builder.append(visit(ctx.links));
+		builder.append(visit(ctx.rechts));
+		builder.append("i2l\n");
+		builder.append("swap\n");
+		builder.append("i2l\n");
+		builder.append("lcmp\n");
+		builder.append("dup\n");
+		builder.append("imul\n");
+		builder.append("dup\n");
+		builder.append("decr\n");
+		builder.append("imul\n");
+		return builder.toString();
 	}
 
 	@Override
@@ -257,9 +269,9 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 		String name = ctx.name.getText();
 		String result = "";
 		if (!currentScope.contains(name)) {
-			System.err.println("Error: Variable already initialized.");
+			System.err.println("Error: Variable does not exist.");
 		} else {
-			result = "ldc "+visit(ctx.wert)+"\n";
+			result = visit(ctx.wert);
 			result += "istore " + String.valueOf(currentScope.getVariable(name).getIndex())+"\n";
 		}
 		return result;
