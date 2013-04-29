@@ -2,6 +2,9 @@ package src;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import src.SauerkrautppParser.If_thenContext;
+import src.SauerkrautppParser.If_then_elseContext;
+
 public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	Scope currentScope;
 	static String BOOL = "wahrheitswert";
@@ -311,9 +314,24 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	}
 
 	@Override
-	public String visitIf_(SauerkrautppParser.If_Context ctx) {
-		// TODO Auto-generated method stub
-		return super.visitIf_(ctx);
+	public String visitIf_then_else(If_then_elseContext ctx) {
+		String result = String.format("ifeq if_label_%d\n", labelCount);
+		result += visit(ctx.statement());
+		result += String.format("goto else_label_%d\n", labelCount);
+		result += String.format("if_label_%d:\n", labelCount);
+		result += visit(ctx.else_());
+		result += String.format("else_label_%d:\n", labelCount);
+		++labelCount;
+		return result;
+	}
+
+	@Override
+	public String visitIf_then(If_thenContext ctx) {
+		String result = String.format("ifeq if_label_%d\n", labelCount);
+		result += visit(ctx.statement());
+		result += String.format("if_label_%d:\n", labelCount);
+		++labelCount;
+		return result;
 	}
 
 	@Override

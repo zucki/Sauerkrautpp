@@ -90,16 +90,14 @@ while_cntrl: LKLAMMER! ausdruck RKLAMMER!
   ;
 
 // if-else
-if_: 'wenn' if_cntrl then=statement
-				| 'wenn' if_cntrl then_body=statement else_
+if_: 'wenn' if_cntrl then=statement							#if_then
+				| 'wenn' if_cntrl then_body=statement else_ #if_then_else
 ;
 
 if_cntrl: LKLAMMER! ausdruck RKLAMMER!
 ;
 
 else_: 'ansonsten' else_body=statement
-				| 'ansonsten wenn' elif_body=statement
-				| 'ansonsten wenn' elif_body=statement else_
 ;
 
 ZAHL: [0-9]+;

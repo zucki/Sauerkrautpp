@@ -1,3 +1,5 @@
+package src;
+
 // Generated from C:\Users\smgug_000\Documents\GitHub\Sauerkrautpp\Sauerkrautpp\src\Sauerkrautpp.g4 by ANTLR 4.0
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
@@ -11,6 +13,8 @@ public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	@Override public T visitNicht(SauerkrautppParser.NichtContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitFor_loop(SauerkrautppParser.For_loopContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitIf_then_else(SauerkrautppParser.If_then_elseContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitGroessergleich(SauerkrautppParser.GroessergleichContext ctx) { return visitChildren(ctx); }
 
@@ -80,7 +84,7 @@ public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 
 	@Override public T visitFor_cntrl(SauerkrautppParser.For_cntrlContext ctx) { return visitChildren(ctx); }
 
-	@Override public T visitIf_(SauerkrautppParser.If_Context ctx) { return visitChildren(ctx); }
+	@Override public T visitIf_then(SauerkrautppParser.If_thenContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitGroesser(SauerkrautppParser.GroesserContext ctx) { return visitChildren(ctx); }
 

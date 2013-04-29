@@ -1,3 +1,5 @@
+package src;
+
 // Generated from C:\Users\smgug_000\Documents\GitHub\Sauerkrautpp\Sauerkrautpp\src\Sauerkrautpp.g4 by ANTLR 4.0
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
@@ -10,6 +12,8 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 	T visitNicht(SauerkrautppParser.NichtContext ctx);
 
 	T visitFor_loop(SauerkrautppParser.For_loopContext ctx);
+
+	T visitIf_then_else(SauerkrautppParser.If_then_elseContext ctx);
 
 	T visitGroessergleich(SauerkrautppParser.GroessergleichContext ctx);
 
@@ -79,7 +83,7 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 
 	T visitFor_cntrl(SauerkrautppParser.For_cntrlContext ctx);
 
-	T visitIf_(SauerkrautppParser.If_Context ctx);
+	T visitIf_then(SauerkrautppParser.If_thenContext ctx);
 
 	T visitGroesser(SauerkrautppParser.GroesserContext ctx);
 
