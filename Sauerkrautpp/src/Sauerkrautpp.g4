@@ -12,7 +12,7 @@ init: typ=TYP name=NAME 'ist' wert=ausdruck 			#Initialisierung
 function_decl: 'funktion' name=NAME 'nimmt' arglist 'gibt' typ=TYP 'zurueck' statement
 ;
 
-print_func: 'gib' ausdruck 'aus'
+print_func: 'gib' wert=ausdruck 'aus'
 ;
 
 arg: typ=TYP name=NAME
@@ -30,7 +30,7 @@ function_call: name=NAME LKLAMMER ausdruecke RKLAMMER
 ;
 
 ausdruecke: ausdruck
-				| ausdruecke '/' ausdruecke
+				| expr=ausdruck '/' rest=ausdruecke
 ;
 
 // punkt
@@ -56,10 +56,11 @@ bstatement: statement
 				| bstatement bstatement
 				;
 
-ausdruck: links=ausdruck 'mal' rechts=ausdruck #Multiplikation
+ausdruck: 'nicht' links=ausdruck #Nicht
+				| links=ausdruck 'mal' rechts=ausdruck #Multiplikation
+				| links=ausdruck 'geteiltdurch' rechts=ausdruck #Division
 				| links=ausdruck 'minus' rechts=ausdruck #Minus
 				| links=ausdruck 'plus' rechts=ausdruck #Plus
-				| links=ausdruck 'geteiltdurch' rechts=ausdruck #Division
 				| links=ausdruck 'oder' rechts=ausdruck #Oder
 				| links=ausdruck 'und' rechts=ausdruck #Und
 				| links=ausdruck 'gleich' rechts=ausdruck #Gleich
@@ -67,7 +68,6 @@ ausdruck: links=ausdruck 'mal' rechts=ausdruck #Multiplikation
 				| links=ausdruck 'kleinergleich' rechts=ausdruck #Kleinergleich
 				| links=ausdruck 'groesser' rechts=ausdruck #Groesser
 				| links=ausdruck 'groessergleich' rechts=ausdruck #Groessergleich
-				| 'nicht' links=ausdruck #Nicht
 				| links=ausdruck 'ungleich' rechts=ausdruck #Ungleich
                 | LKLAMMER inKlammer=ausdruck RKLAMMER #Klammer
                 | ZAHL #Zahl

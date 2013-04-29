@@ -1,5 +1,3 @@
-package src;
-
 // Generated from C:\Users\smgug_000\Documents\GitHub\Sauerkrautpp\Sauerkrautpp\src\Sauerkrautpp.g4 by ANTLR 4.0
 import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
@@ -51,9 +49,9 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 
 	T visitPlus(SauerkrautppParser.PlusContext ctx);
 
-	T visitArguments(SauerkrautppParser.ArgumentsContext ctx);
-
 	T visitMinus(SauerkrautppParser.MinusContext ctx);
+
+	T visitArguments(SauerkrautppParser.ArgumentsContext ctx);
 
 	T visitVariable(SauerkrautppParser.VariableContext ctx);
 

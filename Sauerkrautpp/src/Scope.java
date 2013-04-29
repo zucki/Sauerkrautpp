@@ -23,6 +23,19 @@ public class Scope {
 		return result;
 	}
 	
+	public int searchVar(String name) {
+		Scope currentScope = this;
+		if (currentScope.contains(name))
+			return currentScope.variables.get(name).getIndex();
+		else {
+			if (currentScope.getParent() != null) {
+				return currentScope.getParent().searchVar(name);
+			} else {
+				return -1;
+			}
+		}
+	}
+	
 	public Scope getParent() {
 		return this.parent;
 	}

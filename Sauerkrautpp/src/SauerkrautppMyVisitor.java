@@ -2,13 +2,12 @@ package src;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import src.SauerkrautppParser.KlammerstatementContext;
-
 public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	Scope currentScope;
 	static String BOOL = "wahrheitswert";
 	static String INT = "zahl";
 	static String INT2BOOL = "i2l\nldc 0\ni2l\nlcmp\ndup\nimul\n";
+	static int labelCount;
 	
 	@Override
 	public String visitPlus(SauerkrautppParser.PlusContext ctx) {
@@ -54,7 +53,7 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	}
 
 	@Override
-	public String visitKlammerstatement(KlammerstatementContext ctx) {
+	public String visitKlammerstatement(SauerkrautppParser.KlammerstatementContext ctx) {
 		this.currentScope = new Scope(this.currentScope);
 		String result = visit(ctx.content);
 		this.currentScope = this.currentScope.getParent();
@@ -69,8 +68,10 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitPrint_func(SauerkrautppParser.Print_funcContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitPrint_func(ctx);
+		String result = "getstatic java/lang/System/out Ljava/io/PrintStream;\n";
+		result += visit(ctx.wert);
+		result += "invokevirtual java/io/PrintStream/println(I)V\n";
+		return result;
 	}
 
 	@Override
@@ -198,7 +199,14 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitOder(SauerkrautppParser.OderContext ctx) {
-		return visit(ctx.links) + visit(ctx.rechts) + "iadd\n" + INT2BOOL;
+		StringBuilder builder = new StringBuilder();
+		builder.append(visit(ctx.links));
+		builder.append(INT2BOOL);
+		builder.append(visit(ctx.rechts));
+		builder.append(INT2BOOL);
+		builder.append("iadd\n");
+		builder.append(INT2BOOL);
+		return builder.toString();
 	}
 
 	@Override
@@ -268,11 +276,12 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	public String visitZuweisung(SauerkrautppParser.ZuweisungContext ctx) {
 		String name = ctx.name.getText();
 		String result = "";
-		if (!currentScope.contains(name)) {
+		int index = currentScope.searchVar(name);
+		if (index == -1) {
 			System.err.println("Error: Variable does not exist.");
 		} else {
 			result = visit(ctx.wert);
-			result += "istore " + String.valueOf(currentScope.getVariable(name).getIndex())+"\n";
+			result += "istore " + String.valueOf(index)+"\n";
 		}
 		return result;
 	}
@@ -280,6 +289,7 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	@Override
 	public String visitStart(SauerkrautppParser.StartContext ctx) {
 		currentScope = new Scope(null);
+		labelCount = 0;
 		return visitChildren(ctx);
 	}
 
