@@ -94,7 +94,7 @@ if_: 'wenn' if_cntrl then=statement							#if_then
 				| 'wenn' if_cntrl then_body=statement else_ #if_then_else
 ;
 
-if_cntrl: LKLAMMER! ausdruck RKLAMMER!
+if_cntrl: LKLAMMER! expr=ausdruck RKLAMMER!
 ;
 
 else_: 'ansonsten' else_body=statement

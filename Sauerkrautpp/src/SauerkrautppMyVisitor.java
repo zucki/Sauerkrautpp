@@ -2,9 +2,6 @@ package src;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
-import src.SauerkrautppParser.If_thenContext;
-import src.SauerkrautppParser.If_then_elseContext;
-
 public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	Scope currentScope;
 	static String BOOL = "wahrheitswert";
@@ -139,8 +136,7 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	
 	@Override
 	public String visitIf_cntrl(SauerkrautppParser.If_cntrlContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitIf_cntrl(ctx);
+		return visit(ctx.expr);
 	}
 
 	@Override
@@ -150,8 +146,7 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitElse_(SauerkrautppParser.Else_Context ctx) {
-		// TODO Auto-generated method stub
-		return super.visitElse_(ctx);
+		return visit(ctx.else_body);
 	}
 
 	@Override
@@ -314,23 +309,27 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	}
 
 	@Override
-	public String visitIf_then_else(If_then_elseContext ctx) {
-		String result = String.format("ifeq if_label_%d\n", labelCount);
-		result += visit(ctx.statement());
-		result += String.format("goto else_label_%d\n", labelCount);
-		result += String.format("if_label_%d:\n", labelCount);
-		result += visit(ctx.else_());
-		result += String.format("else_label_%d:\n", labelCount);
+	public String visitIf_then_else(SauerkrautppParser.If_then_elseContext ctx) {
+		int label = labelCount;
 		++labelCount;
+		String result = visit(ctx.if_cntrl());
+		result += String.format("ifeq if_label_%d\n", label);
+		result += visit(ctx.statement());
+		result += String.format("goto else_label_%d\n", label);
+		result += String.format("if_label_%d:\n", label);
+		result += visit(ctx.else_());
+		result += String.format("else_label_%d:\n", label);
 		return result;
 	}
 
 	@Override
-	public String visitIf_then(If_thenContext ctx) {
-		String result = String.format("ifeq if_label_%d\n", labelCount);
-		result += visit(ctx.statement());
-		result += String.format("if_label_%d:\n", labelCount);
+	public String visitIf_then(SauerkrautppParser.If_thenContext ctx) {
+		int label = labelCount;
 		++labelCount;
+		String result = visit(ctx.if_cntrl());
+		result += String.format("ifeq if_label_%d\n", label);
+		result += visit(ctx.statement());
+		result += String.format("if_label_%d:\n", label);
 		return result;
 	}
 

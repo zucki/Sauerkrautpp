@@ -1621,6 +1621,7 @@ public class SauerkrautppParser extends Parser {
 	}
 
 	public static class If_cntrlContext extends ParserRuleContext {
+		public AusdruckContext expr;
 		public AusdruckContext ausdruck() {
 			return getRuleContext(AusdruckContext.class,0);
 		}
@@ -1644,7 +1645,7 @@ public class SauerkrautppParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(224); match(LKLAMMER);
-			setState(225); ausdruck(0);
+			setState(225); ((If_cntrlContext)_localctx).expr = ausdruck(0);
 			setState(226); match(RKLAMMER);
 			}
 		}
