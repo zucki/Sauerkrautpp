@@ -2,6 +2,9 @@ package src;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 
+import src.SauerkrautppParser.FunctionCallWithArgsContext;
+import src.SauerkrautppParser.FunctionCallWithoutArgsContext;
+
 public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	Scope currentScope;
 	static String BOOL = "wahrheitswert";
@@ -62,8 +65,18 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitFor_loop(SauerkrautppParser.For_loopContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitFor_loop(ctx);
+		int label = labelCount;
+		++labelCount;
+		StringBuilder builder = new StringBuilder();
+		builder.append(visit(ctx.initialization));
+		builder.append(String.format("for_head_label_%d:\n", label));
+		builder.append(visit(ctx.condition));
+		builder.append(String.format("ifeq for_end_label_%d\n",label));
+		builder.append(visit(ctx.body));
+		builder.append(visit(ctx.afterthought));
+		builder.append(String.format("goto for_head_label_%d:\n", label));
+		builder.append(String.format("for_end_label_%d:\n", label));
+		return builder.toString();
 	}
 
 	@Override
@@ -81,17 +94,17 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitFullArglist(SauerkrautppParser.FullArglistContext ctx) {
-		return "(" + visit(ctx) + ")";
+		return visit(ctx.content);
 	}
 
 	@Override
 	public String visitArguments(SauerkrautppParser.ArgumentsContext ctx) {
-		return visit(ctx.left) + ", " + visit(ctx.right);
+		return "I;" + visit(ctx.right);
 	}
 
 	@Override
 	public String visitArgument(SauerkrautppParser.ArgumentContext ctx) {
-		return visit(ctx);
+		return "I;";
 	}
 
 	@Override
@@ -186,8 +199,10 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitFunction_decl(SauerkrautppParser.Function_declContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitFunction_decl(ctx);
+		String result = String.format(".method public %s(%s)I\n", ctx.name.getText(), visit(ctx.argumentlist));
+		result += visit(ctx.body);
+		result += ".end method\n";
+		return result;
 	}
 
 	@Override
@@ -296,27 +311,45 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	}
 
 	@Override
-	public String visitStart(SauerkrautppParser.StartContext ctx) {
-		currentScope = new Scope(null);
-		labelCount = 0;
-		return visitChildren(ctx);
+	public String visitProgramWithDeclarations(
+			SauerkrautppParser.ProgramWithDeclarationsContext ctx) {
+		return visit(ctx.declarations) + visit(ctx.content);
 	}
 
 	@Override
-	public String visitFunction_call(SauerkrautppParser.Function_callContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitFunction_call(ctx);
+	public String visitProgram(SauerkrautppParser.ProgramContext ctx) {
+		return visit(ctx.content);
+	}
+
+	@Override
+	public String visitFunctionDeclaration(SauerkrautppParser.FunctionDeclarationContext ctx) {
+		return visit(ctx.declaration);
+	}
+
+	@Override
+	public String visitFunctionDeclarations(SauerkrautppParser.FunctionDeclarationsContext ctx) {
+		return visit(ctx.declaration) + visit(ctx.rest);
+	}
+
+	@Override
+	public String visitFunctionCallWithArgs(FunctionCallWithArgsContext ctx) {
+		String args = "";
+		for (int i = 0; i < ctx.arguments.getChildCount(); ++i) {
+			//if (i%2==0)
+				args += "I;";
+		}
+		return visit(ctx.arguments) + String.format("invokestatic %s(%s)I\n", ctx.name.getText(), args);
+	}
+
+	@Override
+	public String visitFunctionCallWithoutArgs(
+			FunctionCallWithoutArgsContext ctx) {
+		return String.format("invokestatic %s()I\n", ctx.name.getText());
 	}
 
 	@Override
 	public String visitDivision(SauerkrautppParser.DivisionContext ctx) {
 		return visit(ctx.links) + visit(ctx.rechts) + "idiv\n";
-	}
-
-	@Override
-	public String visitFor_cntrl(SauerkrautppParser.For_cntrlContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitFor_cntrl(ctx);
 	}
 
 	@Override

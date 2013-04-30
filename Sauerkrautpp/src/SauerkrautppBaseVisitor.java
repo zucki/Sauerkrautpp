@@ -6,6 +6,8 @@ import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.ParserRuleContext;
 
 public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements SauerkrautppVisitor<T> {
+	@Override public T visitProgramWithDeclarations(SauerkrautppParser.ProgramWithDeclarationsContext ctx) { return visitChildren(ctx); }
+
 	@Override public T visitWhile_cntrl(SauerkrautppParser.While_cntrlContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitBstatement(SauerkrautppParser.BstatementContext ctx) { return visitChildren(ctx); }
@@ -24,6 +26,8 @@ public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 
 	@Override public T visitDeklaration(SauerkrautppParser.DeklarationContext ctx) { return visitChildren(ctx); }
 
+	@Override public T visitFunctionCallWithArgs(SauerkrautppParser.FunctionCallWithArgsContext ctx) { return visitChildren(ctx); }
+
 	@Override public T visitLstatement(SauerkrautppParser.LstatementContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitIf_cntrl(SauerkrautppParser.If_cntrlContext ctx) { return visitChildren(ctx); }
@@ -38,9 +42,9 @@ public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 
 	@Override public T visitKleiner(SauerkrautppParser.KleinerContext ctx) { return visitChildren(ctx); }
 
-	@Override public T visitMultiAusdruck(SauerkrautppParser.MultiAusdruckContext ctx) { return visitChildren(ctx); }
-
 	@Override public T visitWahrheitswert(SauerkrautppParser.WahrheitswertContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitMultiAusdruck(SauerkrautppParser.MultiAusdruckContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitFunction_decl(SauerkrautppParser.Function_declContext ctx) { return visitChildren(ctx); }
 
@@ -49,6 +53,8 @@ public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	@Override public T visitMultiplikation(SauerkrautppParser.MultiplikationContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitWhile_loop(SauerkrautppParser.While_loopContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitProgram(SauerkrautppParser.ProgramContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitEinzelAusdruck(SauerkrautppParser.EinzelAusdruckContext ctx) { return visitChildren(ctx); }
 
@@ -64,9 +70,13 @@ public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 
 	@Override public T visitVariable(SauerkrautppParser.VariableContext ctx) { return visitChildren(ctx); }
 
+	@Override public T visitFunctionDeclaration(SauerkrautppParser.FunctionDeclarationContext ctx) { return visitChildren(ctx); }
+
 	@Override public T visitGleich(SauerkrautppParser.GleichContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitKlammer(SauerkrautppParser.KlammerContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitFunctionDeclarations(SauerkrautppParser.FunctionDeclarationsContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitZahl(SauerkrautppParser.ZahlContext ctx) { return visitChildren(ctx); }
 
@@ -76,19 +86,15 @@ public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 
 	@Override public T visitZuweisung(SauerkrautppParser.ZuweisungContext ctx) { return visitChildren(ctx); }
 
-	@Override public T visitStart(SauerkrautppParser.StartContext ctx) { return visitChildren(ctx); }
-
 	@Override public T visitKlammerstatement(SauerkrautppParser.KlammerstatementContext ctx) { return visitChildren(ctx); }
 
-	@Override public T visitFunction_call(SauerkrautppParser.Function_callContext ctx) { return visitChildren(ctx); }
-
 	@Override public T visitDivision(SauerkrautppParser.DivisionContext ctx) { return visitChildren(ctx); }
-
-	@Override public T visitFor_cntrl(SauerkrautppParser.For_cntrlContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitIf_then(SauerkrautppParser.If_thenContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitGroesser(SauerkrautppParser.GroesserContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitFullArglist(SauerkrautppParser.FullArglistContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitFunctionCallWithoutArgs(SauerkrautppParser.FunctionCallWithoutArgsContext ctx) { return visitChildren(ctx); }
 }

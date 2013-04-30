@@ -1,6 +1,12 @@
 grammar Sauerkrautpp;
 
-start: statement;
+start: 'Programm<>' content=statement											#Program
+				| declarations=function_decls 'Programm<>' content=statement	#ProgramWithDeclarations
+;
+
+function_decls: declaration=function_decl 								#FunctionDeclaration
+				| declaration=function_decl rest=function_decls			#FunctionDeclarations
+;
 
 deklaration: typ=TYP name=NAME
 ;
@@ -9,7 +15,7 @@ init: typ=TYP name=NAME 'ist' wert=ausdruck 			#Initialisierung
 				| name=NAME 'ist' wert=ausdruck 		#Zuweisung
 ;
 
-function_decl: 'funktion' name=NAME 'nimmt' arglist 'gibt' typ=TYP 'zurueck' statement
+function_decl: 'funktion' name=NAME 'nimmt' argumentlist=arglist 'gibt' typ=TYP 'zurueck' body=statement
 ;
 
 print_func: 'gib' wert=ausdruck 'aus'
@@ -19,14 +25,15 @@ arg: typ=TYP name=NAME
 ;
 
 arglist: LKLAMMER RKLAMMER								#EmptyArglist
-				| LKLAMMER args RKLAMMER				#FullArglist
+				| LKLAMMER content=args RKLAMMER		#FullArglist
 ;
 
 args: arg             									#Argument
 				| left=arg '/' right=args   			#Arguments
 ;
 
-function_call: name=NAME LKLAMMER ausdruecke RKLAMMER
+function_call: name=NAME LKLAMMER RKLAMMER							#FunctionCallWithoutArgs
+				| name=NAME LKLAMMER arguments=ausdruecke RKLAMMER	#FunctionCallWithArgs
 ;
 
 ausdruecke: expr=ausdruck                              #EinzelAusdruck
@@ -46,7 +53,6 @@ statement: lstatement
 				| for_loop
 				| while_loop
 				| if_
-				| function_decl
 				;
 
 klammerstatement: '?' content=bstatement '!'
@@ -56,21 +62,21 @@ bstatement: statement
 				| bstatement bstatement
 				;
 
-ausdruck: 'nicht' links=ausdruck #Nicht
-				| links=ausdruck 'mal' rechts=ausdruck #Multiplikation
-				| links=ausdruck 'geteiltdurch' rechts=ausdruck #Division
-				| links=ausdruck 'minus' rechts=ausdruck #Minus
-				| links=ausdruck 'plus' rechts=ausdruck #Plus
-				| links=ausdruck 'oder' rechts=ausdruck #Oder
-				| links=ausdruck 'und' rechts=ausdruck #Und
-				| links=ausdruck 'gleich' rechts=ausdruck #Gleich
-				| links=ausdruck 'kleiner' rechts=ausdruck #Kleiner
-				| links=ausdruck 'kleinergleich' rechts=ausdruck #Kleinergleich
-				| links=ausdruck 'groesser' rechts=ausdruck #Groesser
-				| links=ausdruck 'groessergleich' rechts=ausdruck #Groessergleich
-				| links=ausdruck 'ungleich' rechts=ausdruck #Ungleich
-                | LKLAMMER inKlammer=ausdruck RKLAMMER #Klammer
-                | ZAHL #Zahl
+ausdruck: 'nicht' links=ausdruck 									#Nicht
+				| links=ausdruck 'mal' rechts=ausdruck 				#Multiplikation
+				| links=ausdruck 'geteiltdurch' rechts=ausdruck 	#Division
+				| links=ausdruck 'minus' rechts=ausdruck 			#Minus
+				| links=ausdruck 'plus' rechts=ausdruck 			#Plus
+				| links=ausdruck 'oder' rechts=ausdruck 			#Oder
+				| links=ausdruck 'und' rechts=ausdruck 				#Und
+				| links=ausdruck 'gleich' rechts=ausdruck 			#Gleich
+				| links=ausdruck 'kleiner' rechts=ausdruck 			#Kleiner
+				| links=ausdruck 'kleinergleich' rechts=ausdruck 	#Kleinergleich
+				| links=ausdruck 'groesser' rechts=ausdruck 		#Groesser
+				| links=ausdruck 'groessergleich' rechts=ausdruck 	#Groessergleich
+				| links=ausdruck 'ungleich' rechts=ausdruck 		#Ungleich
+                | LKLAMMER inKlammer=ausdruck RKLAMMER 				#Klammer
+                | ZAHL 	#Zahl
                 | NAME #Variable
                 | BOOL #Wahrheitswert
                 ;

@@ -5,6 +5,8 @@ import org.antlr.v4.runtime.tree.*;
 import org.antlr.v4.runtime.Token;
 
 public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
+	T visitProgramWithDeclarations(SauerkrautppParser.ProgramWithDeclarationsContext ctx);
+
 	T visitWhile_cntrl(SauerkrautppParser.While_cntrlContext ctx);
 
 	T visitBstatement(SauerkrautppParser.BstatementContext ctx);
@@ -23,6 +25,8 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 
 	T visitDeklaration(SauerkrautppParser.DeklarationContext ctx);
 
+	T visitFunctionCallWithArgs(SauerkrautppParser.FunctionCallWithArgsContext ctx);
+
 	T visitLstatement(SauerkrautppParser.LstatementContext ctx);
 
 	T visitIf_cntrl(SauerkrautppParser.If_cntrlContext ctx);
@@ -37,9 +41,9 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 
 	T visitKleiner(SauerkrautppParser.KleinerContext ctx);
 
-	T visitMultiAusdruck(SauerkrautppParser.MultiAusdruckContext ctx);
-
 	T visitWahrheitswert(SauerkrautppParser.WahrheitswertContext ctx);
+
+	T visitMultiAusdruck(SauerkrautppParser.MultiAusdruckContext ctx);
 
 	T visitFunction_decl(SauerkrautppParser.Function_declContext ctx);
 
@@ -48,6 +52,8 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 	T visitMultiplikation(SauerkrautppParser.MultiplikationContext ctx);
 
 	T visitWhile_loop(SauerkrautppParser.While_loopContext ctx);
+
+	T visitProgram(SauerkrautppParser.ProgramContext ctx);
 
 	T visitEinzelAusdruck(SauerkrautppParser.EinzelAusdruckContext ctx);
 
@@ -63,9 +69,13 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 
 	T visitVariable(SauerkrautppParser.VariableContext ctx);
 
+	T visitFunctionDeclaration(SauerkrautppParser.FunctionDeclarationContext ctx);
+
 	T visitGleich(SauerkrautppParser.GleichContext ctx);
 
 	T visitKlammer(SauerkrautppParser.KlammerContext ctx);
+
+	T visitFunctionDeclarations(SauerkrautppParser.FunctionDeclarationsContext ctx);
 
 	T visitZahl(SauerkrautppParser.ZahlContext ctx);
 
@@ -75,19 +85,15 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 
 	T visitZuweisung(SauerkrautppParser.ZuweisungContext ctx);
 
-	T visitStart(SauerkrautppParser.StartContext ctx);
-
 	T visitKlammerstatement(SauerkrautppParser.KlammerstatementContext ctx);
 
-	T visitFunction_call(SauerkrautppParser.Function_callContext ctx);
-
 	T visitDivision(SauerkrautppParser.DivisionContext ctx);
-
-	T visitFor_cntrl(SauerkrautppParser.For_cntrlContext ctx);
 
 	T visitIf_then(SauerkrautppParser.If_thenContext ctx);
 
 	T visitGroesser(SauerkrautppParser.GroesserContext ctx);
 
 	T visitFullArglist(SauerkrautppParser.FullArglistContext ctx);
+
+	T visitFunctionCallWithoutArgs(SauerkrautppParser.FunctionCallWithoutArgsContext ctx);
 }
