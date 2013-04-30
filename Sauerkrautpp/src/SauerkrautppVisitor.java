@@ -37,6 +37,8 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 
 	T visitKleiner(SauerkrautppParser.KleinerContext ctx);
 
+	T visitMultiAusdruck(SauerkrautppParser.MultiAusdruckContext ctx);
+
 	T visitWahrheitswert(SauerkrautppParser.WahrheitswertContext ctx);
 
 	T visitFunction_decl(SauerkrautppParser.Function_declContext ctx);
@@ -46,6 +48,8 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 	T visitMultiplikation(SauerkrautppParser.MultiplikationContext ctx);
 
 	T visitWhile_loop(SauerkrautppParser.While_loopContext ctx);
+
+	T visitEinzelAusdruck(SauerkrautppParser.EinzelAusdruckContext ctx);
 
 	T visitUngleich(SauerkrautppParser.UngleichContext ctx);
 
@@ -62,8 +66,6 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 	T visitGleich(SauerkrautppParser.GleichContext ctx);
 
 	T visitKlammer(SauerkrautppParser.KlammerContext ctx);
-
-	T visitAusdruecke(SauerkrautppParser.AusdrueckeContext ctx);
 
 	T visitZahl(SauerkrautppParser.ZahlContext ctx);
 

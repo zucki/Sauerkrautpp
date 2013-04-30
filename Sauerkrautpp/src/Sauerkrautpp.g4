@@ -29,8 +29,8 @@ args: arg             									#Argument
 function_call: name=NAME LKLAMMER ausdruecke RKLAMMER
 ;
 
-ausdruecke: ausdruck
-				| expr=ausdruck '/' rest=ausdruecke
+ausdruecke: expr=ausdruck                              #EinzelAusdruck
+				| expr=ausdruck '/' rest=ausdruecke    #MultiAusdruck
 ;
 
 // punkt
@@ -76,17 +76,14 @@ ausdruck: 'nicht' links=ausdruck #Nicht
                 ;
 
 // For-Schleife
-for_loop: 'fuer'^ for_cntrl statement
-  ;
-
-for_cntrl: LKLAMMER! init SEMICOLON! ausdruck SEMICOLON! init RKLAMMER!
+for_loop: 'fuer'^ LKLAMMER! initialization=init SEMICOLON! condition=ausdruck SEMICOLON! afterthought=init RKLAMMER! body=statement
   ;
 
 // While-Schleife
-while_loop: 'solange'^ while_cntrl statement
+while_loop: 'solange'^ control=while_cntrl body=statement
   ;
 
-while_cntrl: LKLAMMER! ausdruck RKLAMMER!
+while_cntrl: LKLAMMER! condition=ausdruck RKLAMMER!
   ;
 
 // if-else

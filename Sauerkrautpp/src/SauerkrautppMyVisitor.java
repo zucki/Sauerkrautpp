@@ -44,7 +44,7 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitWhile_cntrl(SauerkrautppParser.While_cntrlContext ctx) {
-		return super.visitWhile_cntrl(ctx);
+		return visit(ctx.condition);
 	}
 
 	@Override
@@ -209,8 +209,15 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitWhile_loop(SauerkrautppParser.While_loopContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitWhile_loop(ctx);
+		int label = labelCount;
+		++labelCount;
+		String result = String.format("while_head_label_%d:\n", label);
+		result += visit(ctx.control);
+		result += String.format("ifeq while_end_label_%d\n", label);
+		result += visit(ctx.body);
+		result += String.format("goto while_head_label_%d\n", label);
+		result += String.format("while_end_label_%d\n", label);
+ 		return result;
 	}
 
 	@Override
@@ -255,9 +262,13 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	}
 
 	@Override
-	public String visitAusdruecke(SauerkrautppParser.AusdrueckeContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitAusdruecke(ctx);
+	public String visitMultiAusdruck(SauerkrautppParser.MultiAusdruckContext ctx) {
+		return visit(ctx.expr) + visit(ctx.rest);
+	}
+
+	@Override
+	public String visitEinzelAusdruck(SauerkrautppParser.EinzelAusdruckContext ctx) {
+		return visit(ctx.expr);
 	}
 
 	@Override
@@ -357,8 +368,8 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	public String visitVariable(SauerkrautppParser.VariableContext ctx) {
 		String result = "";
 		String name = ctx.getText();
-		if (currentScope.contains(name)) {
-			int index = currentScope.getVariable(name).getIndex();
+		int index = currentScope.searchVar(name);
+		if (index != -1) {
 			result = "iload " + String.valueOf(index)+"\n";
 		} else {
 			System.err.println("Error: Variable does not exist.");

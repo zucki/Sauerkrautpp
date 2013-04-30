@@ -38,6 +38,8 @@ public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 
 	@Override public T visitKleiner(SauerkrautppParser.KleinerContext ctx) { return visitChildren(ctx); }
 
+	@Override public T visitMultiAusdruck(SauerkrautppParser.MultiAusdruckContext ctx) { return visitChildren(ctx); }
+
 	@Override public T visitWahrheitswert(SauerkrautppParser.WahrheitswertContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitFunction_decl(SauerkrautppParser.Function_declContext ctx) { return visitChildren(ctx); }
@@ -47,6 +49,8 @@ public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	@Override public T visitMultiplikation(SauerkrautppParser.MultiplikationContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitWhile_loop(SauerkrautppParser.While_loopContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitEinzelAusdruck(SauerkrautppParser.EinzelAusdruckContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitUngleich(SauerkrautppParser.UngleichContext ctx) { return visitChildren(ctx); }
 
@@ -63,8 +67,6 @@ public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	@Override public T visitGleich(SauerkrautppParser.GleichContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitKlammer(SauerkrautppParser.KlammerContext ctx) { return visitChildren(ctx); }
-
-	@Override public T visitAusdruecke(SauerkrautppParser.AusdrueckeContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitZahl(SauerkrautppParser.ZahlContext ctx) { return visitChildren(ctx); }
 

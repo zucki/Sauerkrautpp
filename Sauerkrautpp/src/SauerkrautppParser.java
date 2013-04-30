@@ -527,6 +527,17 @@ public class SauerkrautppParser extends Parser {
 	}
 
 	public static class AusdrueckeContext extends ParserRuleContext {
+		public AusdrueckeContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_ausdruecke; }
+	 
+		public AusdrueckeContext() { }
+		public void copyFrom(AusdrueckeContext ctx) {
+			super.copyFrom(ctx);
+		}
+	}
+	public static class MultiAusdruckContext extends AusdrueckeContext {
 		public AusdruckContext expr;
 		public AusdrueckeContext rest;
 		public AusdruckContext ausdruck() {
@@ -535,13 +546,22 @@ public class SauerkrautppParser extends Parser {
 		public AusdrueckeContext ausdruecke() {
 			return getRuleContext(AusdrueckeContext.class,0);
 		}
-		public AusdrueckeContext(ParserRuleContext parent, int invokingState) {
-			super(parent, invokingState);
-		}
-		@Override public int getRuleIndex() { return RULE_ausdruecke; }
+		public MultiAusdruckContext(AusdrueckeContext ctx) { copyFrom(ctx); }
 		@Override
 		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
-			if ( visitor instanceof SauerkrautppVisitor ) return ((SauerkrautppVisitor<? extends T>)visitor).visitAusdruecke(this);
+			if ( visitor instanceof SauerkrautppVisitor ) return ((SauerkrautppVisitor<? extends T>)visitor).visitMultiAusdruck(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+	public static class EinzelAusdruckContext extends AusdrueckeContext {
+		public AusdruckContext expr;
+		public AusdruckContext ausdruck() {
+			return getRuleContext(AusdruckContext.class,0);
+		}
+		public EinzelAusdruckContext(AusdrueckeContext ctx) { copyFrom(ctx); }
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof SauerkrautppVisitor ) return ((SauerkrautppVisitor<? extends T>)visitor).visitEinzelAusdruck(this);
 			else return visitor.visitChildren(this);
 		}
 	}
@@ -553,18 +573,20 @@ public class SauerkrautppParser extends Parser {
 			setState(99);
 			switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 			case 1:
+				_localctx = new EinzelAusdruckContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(94); ausdruck(0);
+				setState(94); ((EinzelAusdruckContext)_localctx).expr = ausdruck(0);
 				}
 				break;
 
 			case 2:
+				_localctx = new MultiAusdruckContext(_localctx);
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(95); ((AusdrueckeContext)_localctx).expr = ausdruck(0);
+				setState(95); ((MultiAusdruckContext)_localctx).expr = ausdruck(0);
 				setState(96); match(SEMICOLON);
-				setState(97); ((AusdrueckeContext)_localctx).rest = ausdruecke();
+				setState(97); ((MultiAusdruckContext)_localctx).rest = ausdruecke();
 				}
 				break;
 			}
@@ -1365,6 +1387,8 @@ public class SauerkrautppParser extends Parser {
 	}
 
 	public static class For_loopContext extends ParserRuleContext {
+		public For_cntrlContext control;
+		public StatementContext body;
 		public StatementContext statement() {
 			return getRuleContext(StatementContext.class,0);
 		}
@@ -1389,8 +1413,8 @@ public class SauerkrautppParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(193); match(20);
-			setState(194); for_cntrl();
-			setState(195); statement();
+			setState(194); ((For_loopContext)_localctx).control = for_cntrl();
+			setState(195); ((For_loopContext)_localctx).body = statement();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1405,6 +1429,9 @@ public class SauerkrautppParser extends Parser {
 	}
 
 	public static class For_cntrlContext extends ParserRuleContext {
+		public InitContext initialization;
+		public AusdruckContext condition;
+		public InitContext afterthought;
 		public InitContext init(int i) {
 			return getRuleContext(InitContext.class,i);
 		}
@@ -1438,11 +1465,11 @@ public class SauerkrautppParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(197); match(LKLAMMER);
-			setState(198); init();
+			setState(198); ((For_cntrlContext)_localctx).initialization = init();
 			setState(199); match(SEMICOLON);
-			setState(200); ausdruck(0);
+			setState(200); ((For_cntrlContext)_localctx).condition = ausdruck(0);
 			setState(201); match(SEMICOLON);
-			setState(202); init();
+			setState(202); ((For_cntrlContext)_localctx).afterthought = init();
 			setState(203); match(RKLAMMER);
 			}
 		}
@@ -1458,6 +1485,8 @@ public class SauerkrautppParser extends Parser {
 	}
 
 	public static class While_loopContext extends ParserRuleContext {
+		public While_cntrlContext control;
+		public StatementContext body;
 		public StatementContext statement() {
 			return getRuleContext(StatementContext.class,0);
 		}
@@ -1482,8 +1511,8 @@ public class SauerkrautppParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(205); match(22);
-			setState(206); while_cntrl();
-			setState(207); statement();
+			setState(206); ((While_loopContext)_localctx).control = while_cntrl();
+			setState(207); ((While_loopContext)_localctx).body = statement();
 			}
 		}
 		catch (RecognitionException re) {
@@ -1498,6 +1527,7 @@ public class SauerkrautppParser extends Parser {
 	}
 
 	public static class While_cntrlContext extends ParserRuleContext {
+		public AusdruckContext condition;
 		public AusdruckContext ausdruck() {
 			return getRuleContext(AusdruckContext.class,0);
 		}
@@ -1521,7 +1551,7 @@ public class SauerkrautppParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(209); match(LKLAMMER);
-			setState(210); ausdruck(0);
+			setState(210); ((While_cntrlContext)_localctx).condition = ausdruck(0);
 			setState(211); match(RKLAMMER);
 			}
 		}
