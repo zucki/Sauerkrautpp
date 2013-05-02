@@ -46,7 +46,11 @@ lstatement: ausdruck '.'
 				| deklaration '.'
 				| print_func '.'
 				| function_call '.'
+				| rueckgabe '.'
 				;
+
+rueckgabe: 'gib' expr=ausdruck 'zurueck'
+;
 
 statement: lstatement
 				| klammerstatement
@@ -63,8 +67,8 @@ bstatement: statement
 				;
 
 ausdruck: 'nicht' links=ausdruck 									#Nicht
-				| links=ausdruck 'mal' rechts=ausdruck 				#Multiplikation
 				| links=ausdruck 'geteiltdurch' rechts=ausdruck 	#Division
+				| links=ausdruck 'mal' rechts=ausdruck 				#Multiplikation
 				| links=ausdruck 'minus' rechts=ausdruck 			#Minus
 				| links=ausdruck 'plus' rechts=ausdruck 			#Plus
 				| links=ausdruck 'oder' rechts=ausdruck 			#Oder
@@ -79,6 +83,7 @@ ausdruck: 'nicht' links=ausdruck 									#Nicht
                 | ZAHL 	#Zahl
                 | NAME #Variable
                 | BOOL #Wahrheitswert
+                | call=function_call #FunktionsAufruf
                 ;
 
 // For-Schleife

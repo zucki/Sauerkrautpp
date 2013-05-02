@@ -14,6 +14,8 @@ public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 
 	@Override public T visitNicht(SauerkrautppParser.NichtContext ctx) { return visitChildren(ctx); }
 
+	@Override public T visitFunktionsAufruf(SauerkrautppParser.FunktionsAufrufContext ctx) { return visitChildren(ctx); }
+
 	@Override public T visitFor_loop(SauerkrautppParser.For_loopContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitIf_then_else(SauerkrautppParser.If_then_elseContext ctx) { return visitChildren(ctx); }
@@ -95,6 +97,8 @@ public class SauerkrautppBaseVisitor<T> extends AbstractParseTreeVisitor<T> impl
 	@Override public T visitGroesser(SauerkrautppParser.GroesserContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitFullArglist(SauerkrautppParser.FullArglistContext ctx) { return visitChildren(ctx); }
+
+	@Override public T visitRueckgabe(SauerkrautppParser.RueckgabeContext ctx) { return visitChildren(ctx); }
 
 	@Override public T visitFunctionCallWithoutArgs(SauerkrautppParser.FunctionCallWithoutArgsContext ctx) { return visitChildren(ctx); }
 }

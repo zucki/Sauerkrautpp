@@ -1,0 +1,7 @@
+Programm<>
+?
+	fuer<zahl a ist 0 / a kleiner 10 / a ist a plus 1>
+	?
+		gib a aus.
+	!
+!

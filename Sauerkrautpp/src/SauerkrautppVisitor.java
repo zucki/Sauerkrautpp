@@ -13,6 +13,8 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 
 	T visitNicht(SauerkrautppParser.NichtContext ctx);
 
+	T visitFunktionsAufruf(SauerkrautppParser.FunktionsAufrufContext ctx);
+
 	T visitFor_loop(SauerkrautppParser.For_loopContext ctx);
 
 	T visitIf_then_else(SauerkrautppParser.If_then_elseContext ctx);
@@ -94,6 +96,8 @@ public interface SauerkrautppVisitor<T> extends ParseTreeVisitor<T> {
 	T visitGroesser(SauerkrautppParser.GroesserContext ctx);
 
 	T visitFullArglist(SauerkrautppParser.FullArglistContext ctx);
+
+	T visitRueckgabe(SauerkrautppParser.RueckgabeContext ctx);
 
 	T visitFunctionCallWithoutArgs(SauerkrautppParser.FunctionCallWithoutArgsContext ctx);
 }

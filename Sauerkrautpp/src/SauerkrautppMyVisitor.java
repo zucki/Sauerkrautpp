@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 
 import src.SauerkrautppParser.FunctionCallWithArgsContext;
 import src.SauerkrautppParser.FunctionCallWithoutArgsContext;
+import src.SauerkrautppParser.FunktionsAufrufContext;
 
 public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	Scope currentScope;
@@ -11,6 +12,9 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	static String INT = "zahl";
 	static String INT2BOOL = "i2l\nldc 0\ni2l\nlcmp\ndup\nimul\n";
 	static int labelCount;
+	static String mainString = ".method public <init>()V\naload_0\ninvokenonvirtual java/lang/Object/<init>()V\nreturn\n.end method\n\n.method public static main([Ljava/lang/String;)V\n";
+	static String limits = ".limit stack 10000\n.limit locals 10000\n";
+	static String CLASS = ".class public Spp\n.super java/lang/Object\n";
 	
 	@Override
 	public String visitPlus(SauerkrautppParser.PlusContext ctx) {
@@ -64,6 +68,11 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	}
 
 	@Override
+	public String visitFunktionsAufruf(FunktionsAufrufContext ctx) {
+		return visit(ctx.call);
+	}
+
+	@Override
 	public String visitFor_loop(SauerkrautppParser.For_loopContext ctx) {
 		int label = labelCount;
 		++labelCount;
@@ -74,7 +83,7 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 		builder.append(String.format("ifeq for_end_label_%d\n",label));
 		builder.append(visit(ctx.body));
 		builder.append(visit(ctx.afterthought));
-		builder.append(String.format("goto for_head_label_%d:\n", label));
+		builder.append(String.format("goto for_head_label_%d\n", label));
 		builder.append(String.format("for_end_label_%d:\n", label));
 		return builder.toString();
 	}
@@ -99,12 +108,12 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitArguments(SauerkrautppParser.ArgumentsContext ctx) {
-		return "I;" + visit(ctx.right);
+		return "I" + visit(ctx.right);
 	}
 
 	@Override
 	public String visitArgument(SauerkrautppParser.ArgumentContext ctx) {
-		return "I;";
+		return "I";
 	}
 
 	@Override
@@ -166,9 +175,8 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	public String visitKleiner(SauerkrautppParser.KleinerContext ctx) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(visit(ctx.links));
-		builder.append(visit(ctx.rechts));
 		builder.append("i2l\n");
-		builder.append("swap\n");
+		builder.append(visit(ctx.rechts));
 		builder.append("i2l\n");
 		builder.append("lcmp\n");
 		builder.append("ldc 1\n");
@@ -199,7 +207,8 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitFunction_decl(SauerkrautppParser.Function_declContext ctx) {
-		String result = String.format(".method public %s(%s)I\n", ctx.name.getText(), visit(ctx.argumentlist));
+		String result = String.format(".method public static %s(%s)I\n", ctx.name.getText(), visit(ctx.argumentlist));
+		result += limits;
 		result += visit(ctx.body);
 		result += ".end method\n";
 		return result;
@@ -231,7 +240,7 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 		result += String.format("ifeq while_end_label_%d\n", label);
 		result += visit(ctx.body);
 		result += String.format("goto while_head_label_%d\n", label);
-		result += String.format("while_end_label_%d\n", label);
+		result += String.format("while_end_label_%d:\n", label);
  		return result;
 	}
 
@@ -313,12 +322,12 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	@Override
 	public String visitProgramWithDeclarations(
 			SauerkrautppParser.ProgramWithDeclarationsContext ctx) {
-		return visit(ctx.declarations) + visit(ctx.content);
+		return CLASS + visit(ctx.declarations) + mainString + limits + visit(ctx.content) + "return\n.end method\n";
 	}
 
 	@Override
 	public String visitProgram(SauerkrautppParser.ProgramContext ctx) {
-		return visit(ctx.content);
+		return CLASS + mainString + limits + visit(ctx.content) + "return\n.end method\n";
 	}
 
 	@Override
@@ -331,14 +340,24 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 		return visit(ctx.declaration) + visit(ctx.rest);
 	}
 
+	private int countCharInString(char c, String s) {
+		int result = 0;
+		for (int i = 0; i < s.length() ; ++i) {
+			if (c == s.toCharArray()[i]) {
+				++result;
+			}
+		}
+		return result;
+	}
+	
 	@Override
 	public String visitFunctionCallWithArgs(FunctionCallWithArgsContext ctx) {
 		String args = "";
-		for (int i = 0; i < ctx.arguments.getChildCount(); ++i) {
-			//if (i%2==0)
-				args += "I;";
+		for (int i = 0; i < countCharInString('/',ctx.arguments.getText()) + 1; ++i) {
+			args += "I";
 		}
-		return visit(ctx.arguments) + String.format("invokestatic %s(%s)I\n", ctx.name.getText(), args);
+		return visit(ctx.arguments) + 
+				String.format("invokestatic %s(%s)I\n", ctx.name.getText(), args);
 	}
 
 	@Override
@@ -375,6 +394,11 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 		result += visit(ctx.statement());
 		result += String.format("if_label_%d:\n", label);
 		return result;
+	}
+
+	@Override
+	public String visitRueckgabe(SauerkrautppParser.RueckgabeContext ctx) {
+		return visit(ctx.expr) + "ireturn\n";
 	}
 
 	@Override
