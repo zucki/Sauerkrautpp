@@ -28,7 +28,7 @@ arglist: LKLAMMER RKLAMMER								#EmptyArglist
 				| LKLAMMER content=args RKLAMMER		#FullArglist
 ;
 
-args: arg             									#Argument
+args: content=arg             							#Argument
 				| left=arg '/' right=args   			#Arguments
 ;
 

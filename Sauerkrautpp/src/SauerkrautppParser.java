@@ -542,6 +542,7 @@ public class SauerkrautppParser extends Parser {
 		}
 	}
 	public static class ArgumentContext extends ArgsContext {
+		public ArgContext content;
 		public ArgContext arg() {
 			return getRuleContext(ArgContext.class,0);
 		}
@@ -579,7 +580,7 @@ public class SauerkrautppParser extends Parser {
 				_localctx = new ArgumentContext(_localctx);
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(96); arg();
+				setState(96); ((ArgumentContext)_localctx).content = arg();
 				}
 				break;
 

@@ -108,12 +108,12 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitArguments(SauerkrautppParser.ArgumentsContext ctx) {
-		return "I" + visit(ctx.right);
+		return visit(ctx.left) + visit(ctx.right);
 	}
 
 	@Override
 	public String visitArgument(SauerkrautppParser.ArgumentContext ctx) {
-		return "I";
+		return visit(ctx.content);
 	}
 
 	@Override
@@ -163,7 +163,8 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitArg(SauerkrautppParser.ArgContext ctx) {
-		return "int "+ctx.name.getText();
+		currentScope.fPut(ctx.name.getText(), Type.getType(ctx.typ.getText()));
+		return "I";
 	}
 
 	@Override
@@ -207,10 +208,13 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitFunction_decl(SauerkrautppParser.Function_declContext ctx) {
+		Scope oldScope = currentScope;
+		currentScope = new Scope(null);
 		String result = String.format(".method public static %s(%s)I\n", ctx.name.getText(), visit(ctx.argumentlist));
 		result += limits;
 		result += visit(ctx.body);
 		result += ".end method\n";
+		currentScope = oldScope; 
 		return result;
 	}
 
@@ -357,13 +361,13 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 			args += "I";
 		}
 		return visit(ctx.arguments) + 
-				String.format("invokestatic %s(%s)I\n", ctx.name.getText(), args);
+				String.format("invokestatic Spp/%s(%s)I\n", ctx.name.getText(), args);
 	}
 
 	@Override
 	public String visitFunctionCallWithoutArgs(
 			FunctionCallWithoutArgsContext ctx) {
-		return String.format("invokestatic %s()I\n", ctx.name.getText());
+		return String.format("invokestatic Spp%s()I\n", ctx.name.getText());
 	}
 
 	@Override

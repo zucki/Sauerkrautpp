@@ -1,7 +1,10 @@
+funktion test nimmt <zahl a / zahl b> gibt zahl zurueck
+?
+	gib a plus b zurueck.
+!
+
 Programm<>
 ?
-	fuer<zahl a ist 0 / a kleiner 10 / a ist a plus 1>
-	?
-		gib a aus.
-	!
+	zahl a ist test<1 / 2>.
+	gib a aus.
 !

@@ -7,6 +7,7 @@ public class Scope {
 	private static int index = 0;
 	private Scope parent;
 	private Map<String, Variable> variables;
+	private int functionIndex = 0;
 	
 	public Scope(Scope parent) {
 		variables = new HashMap<String, Variable>();
@@ -47,5 +48,11 @@ public class Scope {
 	public void put(String name, Type type) {
 		this.variables.put(name, new Variable(index, type));
 		++index;
+	}
+	
+	public void fPut(String name, Type type) {
+		this.variables.put(name, new Variable(functionIndex, type));
+		++index;
+		++functionIndex;
 	}
 }
