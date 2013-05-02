@@ -35,9 +35,8 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	public String visitUngleich(SauerkrautppParser.UngleichContext ctx) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(visit(ctx.links));
-		builder.append(visit(ctx.rechts));
 		builder.append("i2l\n");
-		builder.append("swap\n");
+		builder.append(visit(ctx.rechts));
 		builder.append("i2l\n");
 		builder.append("lcmp\n");
 		builder.append("dup\n");
@@ -118,13 +117,36 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 
 	@Override
 	public String visitGroessergleich(SauerkrautppParser.GroessergleichContext ctx) {
-		// TODO Auto-generated method stub
-		return super.visitGroessergleich(ctx);
+		int label = labelCount;
+		++labelCount;
+		StringBuilder builder = new StringBuilder();
+		builder.append(visit(ctx.links));
+		builder.append(visit(ctx.rechts));
+		builder.append("isub\n");
+		builder.append(String.format("ifge ge_label_%d\n", label));
+		builder.append("ldc 0\n");
+		builder.append(String.format("goto ge_end_label_%d\n", label));
+		builder.append(String.format("ge_label_%d:\n", label));
+		builder.append("ldc 1\n");
+		builder.append(String.format("ge_end_label_%d:\n", label));
+		return builder.toString();
 	}
 
 	@Override
 	public String visitKleinergleich(SauerkrautppParser.KleinergleichContext ctx) {
-		return super.visitKleinergleich(ctx);
+		int label = labelCount;
+		++labelCount;
+		StringBuilder builder = new StringBuilder();
+		builder.append(visit(ctx.links));
+		builder.append(visit(ctx.rechts));
+		builder.append("isub\n");
+		builder.append(String.format("ifle le_label_%d\n", label));
+		builder.append("ldc 0\n");
+		builder.append(String.format("goto le_end_label_%d\n", label));
+		builder.append(String.format("le_label_%d:\n", label));
+		builder.append("ldc 1\n");
+		builder.append(String.format("le_end_label_%d:\n", label));
+		return builder.toString();
 	}
 
 	@Override
@@ -271,9 +293,8 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	public String visitGleich(SauerkrautppParser.GleichContext ctx) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(visit(ctx.links));
-		builder.append(visit(ctx.rechts));
 		builder.append("i2l\n");
-		builder.append("swap\n");
+		builder.append(visit(ctx.rechts));
 		builder.append("i2l\n");
 		builder.append("lcmp\n");
 		builder.append("dup\n");
@@ -367,7 +388,7 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	@Override
 	public String visitFunctionCallWithoutArgs(
 			FunctionCallWithoutArgsContext ctx) {
-		return String.format("invokestatic Spp%s()I\n", ctx.name.getText());
+		return String.format("invokestatic Spp/%s()I\n", ctx.name.getText());
 	}
 
 	@Override
@@ -409,9 +430,8 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	public String visitGroesser(SauerkrautppParser.GroesserContext ctx) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(visit(ctx.links));
-		builder.append(visit(ctx.rechts));
 		builder.append("i2l\n");
-		builder.append("swap\n");
+		builder.append(visit(ctx.rechts));
 		builder.append("i2l\n");
 		builder.append("lcmp\n");
 		builder.append("ldc 1\n");

@@ -3,8 +3,18 @@ funktion test nimmt <zahl a / zahl b> gibt zahl zurueck
 	gib a plus b zurueck.
 !
 
+funktion legetest nimmt <> gibt zahl zurueck
+?
+	gib 0 groessergleich 0 aus.
+	gib 1 groessergleich 0 aus.
+	gib 0minus1 groessergleich 0 aus.
+	gib 0 kleinergleich 0 aus.
+	gib 1 kleinergleich 0 aus.
+	gib 0minus1 kleinergleich 0 aus.
+	gib 1 zurueck.
+!
+
 Programm<>
 ?
-	zahl a ist test<1 / 2>.
-	gib a aus.
+	legetest<>.
 !
