@@ -25,6 +25,7 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 	public String visitNicht(SauerkrautppParser.NichtContext ctx) {
 		String result = visit(ctx.links);
 		result += INT2BOOL;
+		result += "ldc 1\n";
 		result += "isub\n";
 		result += "dup\n";
 		result += "imul\n";
@@ -39,10 +40,6 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 		builder.append(visit(ctx.rechts));
 		builder.append("i2l\n");
 		builder.append("lcmp\n");
-		builder.append("dup\n");
-		builder.append("imul\n");
-		builder.append("ldc 1\n");
-		builder.append("isub\n");
 		builder.append("dup\n");
 		builder.append("imul\n");
 		return builder.toString();
@@ -299,8 +296,9 @@ public class SauerkrautppMyVisitor extends SauerkrautppBaseVisitor<String> {
 		builder.append("lcmp\n");
 		builder.append("dup\n");
 		builder.append("imul\n");
+		builder.append("ldc 1\n");
+		builder.append("isub\n");
 		builder.append("dup\n");
-		builder.append("decr\n");
 		builder.append("imul\n");
 		return builder.toString();
 	}

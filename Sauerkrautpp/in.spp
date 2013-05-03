@@ -1,20 +1,25 @@
-funktion test nimmt <zahl a / zahl b> gibt zahl zurueck
+funktion hoch nimmt <zahl a / zahl b> gibt zahl zurueck
 ?
-	gib a plus b zurueck.
+	zahl erg ist 1.
+	fuer<zahl i ist 0 / i kleiner b / i ist i plus 1>
+	?
+		erg ist erg mal a.
+	!
+	gib erg zurueck.
 !
 
-funktion legetest nimmt <> gibt zahl zurueck
+funktion fak nimmt <zahl i> gibt zahl zurueck
 ?
-	gib 0 groessergleich 0 aus.
-	gib 1 groessergleich 0 aus.
-	gib 0minus1 groessergleich 0 aus.
-	gib 0 kleinergleich 0 aus.
-	gib 1 kleinergleich 0 aus.
-	gib 0minus1 kleinergleich 0 aus.
-	gib 1 zurueck.
+	wenn <nicht<i ungleich 0>>
+	?
+		gib 1 zurueck.
+	!
+	gib i mal fak<i minus 1> zurueck.
 !
 
 Programm<>
 ?
-	legetest<>.
+	gib hoch<2 / 10> aus.
+	gib fak<5> aus.
+	gib 1 gleich 0 aus.
 !
